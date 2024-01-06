@@ -49,7 +49,7 @@ export default function Items() {
 
     return <div style={{padding: "20px"}}>
         <div style={{display: 'flex', alignItems: 'center', paddingTop: '10px', paddingBottom: '10px'}}>
-            <h5 className="p-1">All Filter</h5>
+            <h5 className="p-1 d-none d-md-block">Filter:</h5>
             
             <DropdownButton id="dropdown-basic-button" title="Categories" className="p-1" variant="secondary">
                 <Dropdown.Item onClick={() => filterTheData("Football")} active={activeCategory === "Football"}>Football</Dropdown.Item>
@@ -87,7 +87,7 @@ export default function Items() {
       <Card.Img variant="top" src={categoryImages[item.category]} style={{maxHeight: "225px", maxWidth: "325px"}} />
       <Card.Body>
         <Card.Text style={{fontSize: "16px", height: "", overflow: "hidden"}}>{item.productName}</Card.Text>
-        <Card.Text style={{fontSize: "16px", overflow: "hidden", color: "red"}}>{item.price} euro</Card.Text>
+        <Card.Text style={{fontSize: "16px", overflow: "hidden", color: "red"}}>{item.price} euro </Card.Text>
         
       </Card.Body>
     </Card>

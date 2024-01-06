@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { useContext, useState, useEffect } from "react";
-import { DataContext } from "../App";
+import { DataContext, CartContext } from "../App";
 import { Link, useParams } from "react-router-dom";
 import {
   Container,
@@ -29,11 +29,14 @@ const categoryImages = {
 export default function ItemDetails() {
   const { id } = useParams();
   const data = useContext(DataContext);
+  const [cart, setCart] = useContext(CartContext);
   const item = data.find((item) => item._id === id);
  console.log(item)
 
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+
+  
 
   useEffect(() => {
     if (item) {
@@ -46,32 +49,49 @@ export default function ItemDetails() {
     return <div>Item not found</div>;
   }
 
-  console.log(selectedSize, selectedColor)
-
+  console.log(selectedSize, selectedColor, 'itemdetails - selectedsize and color')
+ 
+  console.log("Current cart contents:", cart);
   const addToCart = () => {
-    const sessionId = Cookies.get('sessionId')
-    const orderDetails = {
+    const sessionId = Cookies.get('sessionId');
+    const newItem = {
       sessionId: sessionId,
       itemId: item._id,
       size: selectedSize,
       color: selectedColor,
       productName: item.productName,
       price: item.price,
-    }
-
-    fetch("http://localhost:3001/cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(orderDetails),
-    })
-    .then(resposne => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.log(`Failed to add item to cart: ${error.message}`))
-
-  }
-
+      quantity: 1, 
+    };
+  
+    setCart(currentCart => {
+      // Find the index of the item if it exists
+      const existingItemIndex = currentCart.findIndex(cartItem =>
+        cartItem.itemId === newItem.itemId &&
+        cartItem.size === newItem.size &&
+        cartItem.color === newItem.color
+      );
+  
+      // Copy the current cart to a new array
+      let updatedCart = [...currentCart];
+  
+      if (existingItemIndex >= 0) {
+        // If the item exists, increment its quantity
+        updatedCart[existingItemIndex].quantity += newItem.quantity;
+      } else {
+        // If the item does not exist, add it to the cart
+        updatedCart.push(newItem);
+      }
+  
+      // Save the updated cart to local storage
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+  
+      return updatedCart;
+    });
+  };
+  
+  
+  
   return (
     <div>
       <Link to="/items" >

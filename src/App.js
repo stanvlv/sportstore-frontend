@@ -24,6 +24,16 @@ export const DataProvider = ({ children }) => {
   return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
 };
 
+export const CartContext = createContext();
+export const CartProvider = ({ children}) => {
+  const [cart, setCart] = useState(() => {    
+  const savedCart = localStorage.getItem('cart');
+  return savedCart ? JSON.parse(savedCart) : [];
+  });
+  return <CartContext.Provider value={[cart, setCart]}>{children}</CartContext.Provider>;
+}
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -57,18 +67,29 @@ const router = createBrowserRouter([
 function App() {
 
 useEffect(() => {
-  if(!Cookies.get('sessionId')) {
-    const oneHourLater = new Date();
-      oneHourLater.setTime(oneHourLater.getTime() + (1 * 60 * 60 * 1000));
-      Cookies.set('sessionId', uuidv4(), { expires: oneHourLater });
+  const currentSessionId = Cookies.get('sessionId');
+  const oneHourLater = new Date(new Date().getTime() + 60 * 60 * 1000);
+
+  if(!currentSessionId) {
+    Cookies.set('sessionId', uuidv4(), { expires: oneHourLater} );
   }
+
+  const cartExpiry = localStorage.getItem('cartExpiry');
+  if(!cartExpiry || new Date().getTime() > parseInt(cartExpiry)) {
+    localStorage.removeItem('cart');
+    localStorage.removeItem('cartExpiry');
+  }
+
+  localStorage.setItem('cartExpiry', oneHourLater.getTime());
 }, [])
 
   
   return (
     <DataProvider>
       {/* <div> */}
+      <CartProvider>
         <RouterProvider router={router}></RouterProvider>
+      </CartProvider>
       {/* </div> */}
     </DataProvider>
   );
