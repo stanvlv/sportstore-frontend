@@ -68,8 +68,8 @@ function App() {
 
 useEffect(() => {
   const currentSessionId = Cookies.get('sessionId');
-  const oneHourLater = new Date(new Date().getTime() + 60 * 60 * 1000);
-
+  const oneHourLater = new Date();
+  oneHourLater.setTime(oneHourLater.getTime() + (60 * 60 * 1000));
   if(!currentSessionId) {
     Cookies.set('sessionId', uuidv4(), { expires: oneHourLater} );
   }
@@ -83,7 +83,6 @@ useEffect(() => {
   localStorage.setItem('cartExpiry', oneHourLater.getTime());
 }, [])
 
-  
   return (
     <DataProvider>
       {/* <div> */}

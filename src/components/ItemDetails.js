@@ -31,7 +31,7 @@ export default function ItemDetails() {
   const data = useContext(DataContext);
   const [cart, setCart] = useContext(CartContext);
   const item = data.find((item) => item._id === id);
- console.log(item)
+ 
 
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -49,13 +49,11 @@ export default function ItemDetails() {
     return <div>Item not found</div>;
   }
 
-  console.log(selectedSize, selectedColor, 'itemdetails - selectedsize and color')
  
-  console.log("Current cart contents:", cart);
+  
   const addToCart = () => {
-    const sessionId = Cookies.get('sessionId');
+   
     const newItem = {
-      sessionId: sessionId,
       itemId: item._id,
       size: selectedSize,
       color: selectedColor,

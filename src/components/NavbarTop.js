@@ -21,9 +21,9 @@ export default function NavbarTop() {
           <Nav.Link>
             <Link className="nav-link" to="/items">Products</Link>
           </Nav.Link>
-          <Nav.Link>
+          {/* <Nav.Link>
             <Link className="nav-link" to="/cart">Categories</Link>
-          </Nav.Link>
+          </Nav.Link> */}
           <Nav.Link>
             <Link className="nav-link" to="/checkout">Checkout</Link>
           </Nav.Link>
