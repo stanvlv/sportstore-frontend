@@ -32,10 +32,6 @@ which you can find at [Sportstore Backend](https://github.com/stanvlv/sportstore
     ``` 
     npm start
     
-### Running the Application
-To start the application locally:
-    ```
-    npm start
 - This will launch the application in development mode. Open http://localhost:3000 to view it in your browser. The page will automatically reload if you make changes to the code.
 
 #### Contribution
