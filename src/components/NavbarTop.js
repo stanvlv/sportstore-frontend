@@ -51,7 +51,7 @@ export default function NavbarTop() {
                 Cart
                 <MdOutlineShoppingCart />
                 {cartItemCount > 0 && (
-                  <Badge pill bg="danger" className="ms-1">
+                  <Badge pill bg="info" className="ms-1">
                     {cartItemCount}
                   </Badge>
                 )}
