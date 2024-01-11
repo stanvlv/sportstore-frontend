@@ -7,11 +7,10 @@ import Checkout from "./components/Checkout";
 import Main from "./components/Main";
 import Home from "./components/Home";
 import { useState, useEffect, createContext, Suspense } from "react";
-import Spinner from 'react-bootstrap/Spinner';
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from "uuid";
 
-
+// setting context for the products data 
 export const DataContext = createContext();
 export const DataProvider = ({ children }) => {
   const [data, setData] = useState([]);
@@ -24,6 +23,7 @@ export const DataProvider = ({ children }) => {
   return <DataContext.Provider value={data}>{children}</DataContext.Provider>;
 };
 
+// setting context for the cart orders data
 export const CartContext = createContext();
 export const CartProvider = ({ children}) => {
   const [cart, setCart] = useState(() => {    
@@ -66,6 +66,7 @@ const router = createBrowserRouter([
 
 function App() {
 
+// setting cookies for the session id, used in orders
 useEffect(() => {
   const currentSessionId = Cookies.get('sessionId');
   const oneHourLater = new Date();

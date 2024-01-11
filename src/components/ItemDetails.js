@@ -1,4 +1,4 @@
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { useContext, useState, useEffect } from "react";
 import { DataContext, CartContext } from "../App";
 import { Link, useParams } from "react-router-dom";
@@ -7,8 +7,6 @@ import {
   Row,
   Col,
   Image,
-  Dropdown,
-  DropdownButton,
   Button,
 } from "react-bootstrap";
 
