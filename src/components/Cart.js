@@ -1,13 +1,12 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Container, Row, Col, Image, Button } from "react-bootstrap";
-import { CartContext } from "../App";
+import { CartContext, CartQuantityContext } from "../App";
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
-// import { v4 as uuidv4 } from "uuid";
 
 export default function Cart() {
+  const { updateCartCount } = useContext(CartQuantityContext);
   const [cart, setCart] = useContext(CartContext);
-  console.log(cart, " ei tuka da vidim");
 
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -27,7 +26,8 @@ export default function Cart() {
       );
 
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-
+      // update the badge next to the cart icon
+      updateCartCount();
       return updatedCart;
     });
   };
@@ -36,7 +36,6 @@ export default function Cart() {
 
   const sendOrder = () => {
     const sessionId = Cookies.get("sessionId");
-    console.log(sessionId, " the session id ");
     // Prepare the items in the format expected by the backend
     const items = cart.map((item) => ({
       products: item.itemId,
@@ -57,15 +56,11 @@ export default function Cart() {
       },
       body: JSON.stringify(orderDetails),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Order successfully sent:", data);
-        // clear the session id and the cart
-        // Cookies.remove("sessionId");
-        // setCart([]);
-        // localStorage.removeItem("cart");
-
-        console.log(sessionId, " the session id after the order is sent")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error sending order");
+        }
+        return response.json();
       })
       .catch((error) => {
         console.error("Error sending order:", error);

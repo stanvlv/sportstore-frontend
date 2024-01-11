@@ -16,7 +16,7 @@ export default function Home() {
         height: "100vh",
       }}
     >
-      <h1 style={{color: '#424874'}}>Welcome to SportStore</h1>
+      <h1 style={{ color: "#424874" }}>Welcome to SportStore</h1>
       <Image
         src={sportslogo}
         width="350"
@@ -24,9 +24,9 @@ export default function Home() {
         className="d-inline-block"
         alt="SportStore"
       />
-      <p style={{color: '#424874', fontSize: '24px'}}>
-        We have more than {data.length} products for you to choose from. Feel free to
-        browse around.
+      <p style={{ color: "#424874", fontSize: "24px" }}>
+        We have more than {data.length} products for you to choose from. Feel
+        free to browse around.
       </p>
     </div>
   );

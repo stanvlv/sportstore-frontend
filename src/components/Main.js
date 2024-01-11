@@ -6,10 +6,9 @@ export default function Main() {
   return (
     <div>
       <NavbarTop />
-      <Container  className="bg-body-subtle">
+      <Container className="bg-body-subtle">
         <Outlet />
       </Container>
     </div>
   );
 }
-

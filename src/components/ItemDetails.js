@@ -1,14 +1,7 @@
-// import Cookies from "js-cookie";
 import { useContext, useState, useEffect } from "react";
-import { DataContext, CartContext } from "../App";
+import { DataContext, CartContext, CartQuantityContext } from "../App";
 import { Link, useParams } from "react-router-dom";
-import {
-  Container,
-  Row,
-  Col,
-  Image,
-  Button,
-} from "react-bootstrap";
+import { Container, Row, Col, Image, Button } from "react-bootstrap";
 
 import footballFoto from "../images/football.png";
 import tennisFoto from "../images/tennis.png";
@@ -26,51 +19,47 @@ const categoryImages = {
 
 export default function ItemDetails() {
   const { id } = useParams();
+  const { updateCartCount } = useContext(CartQuantityContext);
   const data = useContext(DataContext);
   const [cart, setCart] = useContext(CartContext);
   const item = data.find((item) => item._id === id);
- 
 
-  const [selectedSize, setSelectedSize] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
-
-  
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
 
   useEffect(() => {
     if (item) {
-      setSelectedSize(item.sizes ? item.sizes[0] : '');
-      setSelectedColor(item.colors ? item.colors[0] : '');
+      setSelectedSize(item.sizes ? item.sizes[0] : "");
+      setSelectedColor(item.colors ? item.colors[0] : "");
     }
   }, [item]);
 
- if (!item) {
+  if (!item) {
     return <div>Item not found</div>;
   }
 
- 
-  
   const addToCart = () => {
-   
     const newItem = {
       itemId: item._id,
       size: selectedSize,
       color: selectedColor,
       productName: item.productName,
       price: item.price,
-      quantity: 1, 
+      quantity: 1,
     };
-  
-    setCart(currentCart => {
+
+    setCart((currentCart) => {
       // Find the index of the item if it exists
-      const existingItemIndex = currentCart.findIndex(cartItem =>
-        cartItem.itemId === newItem.itemId &&
-        cartItem.size === newItem.size &&
-        cartItem.color === newItem.color
+      const existingItemIndex = currentCart.findIndex(
+        (cartItem) =>
+          cartItem.itemId === newItem.itemId &&
+          cartItem.size === newItem.size &&
+          cartItem.color === newItem.color
       );
-  
+
       // Copy the current cart to a new array
       let updatedCart = [...currentCart];
-  
+
       if (existingItemIndex >= 0) {
         // If the item exists, increment its quantity
         updatedCart[existingItemIndex].quantity += newItem.quantity;
@@ -78,22 +67,23 @@ export default function ItemDetails() {
         // If the item does not exist, add it to the cart
         updatedCart.push(newItem);
       }
-  
+
       // Save the updated cart to local storage
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
-  
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      // update the badge next to the cart icon
+      updateCartCount();
       return updatedCart;
     });
   };
-  
-  
-  
+
   return (
     <div>
-      <Link to="/items" >
-      <Button variant="outline-secondary" href="/items">go back</Button>
+      <Link to="/items">
+        <Button variant="outline-secondary" href="/items">
+          go back
+        </Button>
       </Link>
-      <Container style={{padding: 5}}>
+      <Container style={{ padding: 5 }}>
         <Row>
           <Col
             xs={12}
@@ -102,10 +92,10 @@ export default function ItemDetails() {
             lg={6}
             xl={6}
             style={{
-              display: "flex",           // Make this a flex container
-              justifyContent: "center",  // Center content horizontally
-              alignItems: "center",      // Center content vertically
-              height: "100%"             // Set a height (adjust as needed)
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
             }}
           >
             <Image
@@ -133,52 +123,32 @@ export default function ItemDetails() {
             <div style={{ marginBottom: "20px" }}>
               <h5>Available Sizes :</h5>
               {item.sizes.map((size, index) => (
-      <Button 
-        key={index} 
-        variant="outline-secondary" 
-        style={{ margin: '5px' }}
-        onClick={() => setSelectedSize(size)}
-        active={selectedSize === size}
-      >
-        {size}
-      </Button>
-    ))}
-
-              {/* <DropdownButton
-                id="dropdown-sizes"
-                title="Select Size"
-                variant="secondary"
-              >
-                {item.sizes.map((size, index) => (
-                  <Dropdown.Item key={index}>{size}</Dropdown.Item>
-                ))}
-              </DropdownButton> */}
+                <Button
+                  key={index}
+                  variant="outline-secondary"
+                  style={{ margin: "5px" }}
+                  onClick={() => setSelectedSize(size)}
+                  active={selectedSize === size}
+                >
+                  {size}
+                </Button>
+              ))}
             </div>
 
             {/* Available Colors */}
             <div style={{ marginBottom: "20px" }}>
               <h5>Available Colors :</h5>
               {item.colors.map((color, index) => (
-      <Button 
-        key={index} 
-        variant="outline-secondary" 
-        style={{ margin: '5px'}}
-        onClick={() => setSelectedColor(color)}
-        active={selectedColor === color}
-      >
-        {color}
-      </Button>
-    ))}
-
-              {/* <DropdownButton
-                id="dropdown-colors"
-                title="Select Color"
-                variant="secondary"
-              >
-                {item.colors.map((color, index) => (
-                  <Dropdown.Item key={index}>{color}</Dropdown.Item>
-                ))}
-              </DropdownButton> */}
+                <Button
+                  key={index}
+                  variant="outline-secondary"
+                  style={{ margin: "5px" }}
+                  onClick={() => setSelectedColor(color)}
+                  active={selectedColor === color}
+                >
+                  {color}
+                </Button>
+              ))}
             </div>
 
             {/* item Description */}
@@ -195,7 +165,9 @@ export default function ItemDetails() {
                 sunt in culpa qui officia deserunt mollit anim id est laborum.
               </p>
             </div>
-            <Button variant="outline-info" onClick={() => addToCart()}>Add to the Shopping Cart</Button>
+            <Button variant="outline-info" onClick={() => addToCart()}>
+              Add to the Shopping Cart
+            </Button>
           </Col>
         </Row>
       </Container>
